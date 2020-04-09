@@ -159,7 +159,7 @@ link_directories(${VTK_LIBRARY_DIRS})
 PCL_ADD_LIBRARY(${LIB_NAME} COMPONENT ${SUBSYS_NAME} SOURCES ${srcs} ${incs} ${impl_incs} ${VTK_SMOOTHING_INCLUDES} ${POISSON_INCLUDES} ${OPENNURBS_INCLUDES} ${ON_NURBS_INCLUDES})
 target_link_libraries("${LIB_NAME}" pcl_common pcl_search pcl_kdtree pcl_octree ${VTK_LIBRARIES} ${ON_NURBS_LIBRARIES})
 if(QHULL_FOUND)
-  target_link_libraries("${LIB_NAME}" ${QHULL_LIBRARIES})
+  target_link_libraries("${LIB_NAME}" QHULL::QHULL)
 endif()
 PCL_MAKE_PKGCONFIG(${LIB_NAME} COMPONENT ${SUBSYS_NAME} DESC ${SUBSYS_DESC} PCL_DEPS ${SUBSYS_DEPS})
 
