@@ -48,9 +48,13 @@ if(Qhull_FOUND)
   set(HAVE_QHULL ON)
   add_library(QHULL::QHULL INTERFACE IMPORTED)
   if(QHULL_USE_STATIC)
-    set_property(TARGET QHULL::QHULL APPEND PROPERTY INTERFACE_LINK_LIBRARY Qhull::qhullstatic)
+    set_property(TARGET QHULL::QHULL APPEND PROPERTY INTERFACE_LINK_LIBRARIES Qhull::qhullstatic)
   else()
-    set_property(TARGET QHULL::QHULL APPEND PROPERTY INTERFACE_LINK_LIBRARY Qhull::libqhull)
+    set_property(TARGET QHULL::QHULL APPEND PROPERTY INTERFACE_LINK_LIBRARIES Qhull::libqhull)
+    target_compile_definitions(QHULL::QHULL INTERFACE qh_QHpointer)
+    if(MSVC)
+      target_compile_definitions(QHULL::QHULL INTERFACE qh_QHpointer_dllimport)
+    endif()
   endif()
   return()
 endif()
@@ -66,7 +70,7 @@ else()
 endif()
 
 find_file(QHULL_HEADER
-          NAMES libqhull/libqhull.h qhull.h
+          NAMES libqhull/libqhull.h
           HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}" "${QHULL_INCLUDE_DIR}"
           PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull"
           PATH_SUFFIXES qhull src/libqhull libqhull include)
@@ -74,15 +78,8 @@ find_file(QHULL_HEADER
 set(QHULL_HEADER "${QHULL_HEADER}" CACHE INTERNAL "QHull header" FORCE )
 
 if(QHULL_HEADER)
-  get_filename_component(qhull_header ${QHULL_HEADER} NAME_WE)
-  if("${qhull_header}" STREQUAL "qhull")
-    set(HAVE_QHULL_2011 OFF)
-    get_filename_component(QHULL_INCLUDE_DIR ${QHULL_HEADER} PATH)
-  elseif("${qhull_header}" STREQUAL "libqhull")
-    set(HAVE_QHULL_2011 ON)
     get_filename_component(QHULL_INCLUDE_DIR ${QHULL_HEADER} PATH)
     get_filename_component(QHULL_INCLUDE_DIR ${QHULL_INCLUDE_DIR} PATH)
-  endif()
 else()
   set(QHULL_INCLUDE_DIR "QHULL_INCLUDE_DIR-NOTFOUND")
 endif()
