@@ -40,6 +40,7 @@
 #include <istream>
 #include <fstream>
 #include <boost/filesystem.hpp>
+#include <boost/filesystem/path.hpp>
 #include <cstdint>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -98,7 +99,7 @@ pcl::ASCIIReader::readHeader (const std::string& file_name,
     PCL_ERROR ("[%s] File %s does not exist.\n", name_.c_str (), file_name.c_str ());
     return (-1);
   }
-  if (boost::filesystem::extension (fpath) != extension_)
+  if (fpath.extension() != extension_)
   {
     PCL_ERROR ("[%s] File does not have %s extension. \n", name_.c_str(), extension_.c_str());
     return -1;
